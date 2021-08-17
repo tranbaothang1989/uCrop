@@ -18,6 +18,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
+import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -278,6 +279,8 @@ public class UCrop {
 
         public static final String EXTRA_UCROP_ROOT_VIEW_BACKGROUND_COLOR = EXTRA_PREFIX + ".UcropRootViewBackgroundColor";
 
+        public static final String EXTRA_UCROP_WIDGET_FONT_RES_ID= EXTRA_PREFIX + ".FontId";
+
 
         private final Bundle mOptionBundle;
 
@@ -533,6 +536,10 @@ public class UCrop {
         public void withMaxResultSize(@IntRange(from = MIN_SIZE) int width, @IntRange(from = MIN_SIZE) int height) {
             mOptionBundle.putInt(EXTRA_MAX_SIZE_X, width);
             mOptionBundle.putInt(EXTRA_MAX_SIZE_Y, height);
+        }
+
+        public void withTextFont(@IntegerRes int fontId){
+            mOptionBundle.putInt(EXTRA_UCROP_WIDGET_FONT_RES_ID, fontId);
         }
 
     }
