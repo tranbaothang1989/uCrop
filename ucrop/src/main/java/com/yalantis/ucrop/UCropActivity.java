@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -52,6 +53,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.transition.AutoTransition;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
@@ -85,6 +87,7 @@ public class UCropActivity extends AppCompatActivity {
 
     private String mToolbarTitle;
 
+    private int mFontResId;
     // Enables dynamic coloring
     private int mToolbarColor;
     private int mStatusBarColor;
@@ -299,6 +302,8 @@ public class UCropActivity extends AppCompatActivity {
         mShowBottomControls = !intent.getBooleanExtra(UCrop.Options.EXTRA_HIDE_BOTTOM_CONTROLS, false);
         mRootViewBackgroundColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_ROOT_VIEW_BACKGROUND_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_crop_background));
 
+        mFontResId = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_FONT_RES_ID, 0);
+
         setupAppBar();
         initiateRootViews();
 
@@ -345,6 +350,7 @@ public class UCropActivity extends AppCompatActivity {
         final TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setTextColor(mToolbarWidgetColor);
         toolbarTitle.setText(mToolbarTitle);
+        toolbarTitle.setTypeface(mFontResId == 0 ? Typeface.DEFAULT : ResourcesCompat.getFont(this, mFontResId));
 
         // Color buttons inside the Toolbar
         Drawable stateButtonDrawable = ContextCompat.getDrawable(this, mToolbarCancelDrawable).mutate();
@@ -567,7 +573,10 @@ public class UCropActivity extends AppCompatActivity {
 
     private void setScaleText(float scale) {
         if (mTextViewScalePercent != null) {
-            mTextViewScalePercent.setText(String.format(Locale.getDefault(), "%d%%", (int) (scale * 100)));
+            float initialScale = mGestureCropImageView.getInitialMinScale();
+            mTextViewScalePercent.setText(
+                    String.format(Locale.getDefault(), "%.2f%%", (scale/ initialScale * 100))
+            );
         }
     }
 
